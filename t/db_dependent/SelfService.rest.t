@@ -124,7 +124,7 @@ subtest("Scenario: Simple test REST API calls.", sub {
         $t->post_ok($librarian_host.'/api/v1/contrib/kohasuomi/borrowers/ssstatus' => form => {cardnumber => $patron->userid(), branchcode => 'IPT'})
         ->status_is('200')
         ->json_like('/permission', qr/0/, "Permission denied")
-        ->json_like('/error', qr/Koha::Plugin::Fi::KohaSuomi::SelfService::Exception::TACNotAccepted/);
+        ->json_like('/error', qr/Koha::Exception::SelfService::TACNotAccepted/);
     };
 
     subtest("GET /borrowers/ssstatus, terms and conditions accepted", sub {
@@ -138,7 +138,7 @@ subtest("Scenario: Simple test REST API calls.", sub {
         $t->post_ok($librarian_host.'/api/v1/contrib/kohasuomi/borrowers/ssstatus' => form => {cardnumber => $patron->userid(), branchcode => 'IPT'})
         ->status_is('200')
         ->json_like('/permission', qr/0/, "Permission denied")
-        ->json_like('/error', qr/Koha::Plugin::Fi::KohaSuomi::SelfService::Exception::BlockedBorrowerCategory/);
+        ->json_like('/error', qr/Koha::Exception::SelfService::BlockedBorrowerCategory/);
     });
 
     subtest("GET /borrowers/ssstatus, OK, categorycode changed", sub {
@@ -161,7 +161,7 @@ subtest("Scenario: Simple test REST API calls.", sub {
         ->json_like('/permission', qr/0/, "Permission denied")
         ->json_like('/startTime', qr/07:00/, "startTime")
         ->json_like('/endTime', qr/06:00/, "endTime")
-        ->json_like('/error', qr/Koha::Plugin::Fi::KohaSuomi::SelfService::Exception::OpeningHours/);
+        ->json_like('/error', qr/Koha::Exception::SelfService::OpeningHours/);
     });
 
     subtest("GET /borrowers/ssstatus, bad library", sub {
