@@ -13,6 +13,9 @@ use Koha::Plugin::Fi::KohaSuomi::SelfService::BlockManager;
 use Koha::AuthUtils;
 use Koha::Database;
 
+use Koha::Patron::Categories;
+use Koha::Patrons;
+
 use C4::SIP::ILS;
 use C4::SIP::Sip::MsgType;
 
@@ -105,7 +108,7 @@ subtest("63/64 access type blocked", sub {
         "And the access type field 'PA' says no access '0'");
 });
 
-
+cleanup();
 
 done_testing();
 
@@ -120,6 +123,13 @@ sub do63_64 {
     select(STDOUT) or die("Couldn't re-select STDOUT: $!");
     close($CAPTURE_STDOUT) or die("Couldn't close \$CAPTURE_OUTPUT: $!");
     return ($status, $stdout);
+}
+
+sub cleanup {
+    Koha::Patrons->find($blockedBorrower->{borrowernumber})->delete;
+    Koha::Patrons->find($terminal->{borrowernumber})->delete;
+    Koha::Patron::Categories->find($blockedBorrower->{categorycode})->delete;
+    Koha::Patron::Categories->find($terminal->{categorycode})->delete;
 }
 
 #$schema->storage->txn_rollback;
