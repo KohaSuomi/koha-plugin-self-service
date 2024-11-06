@@ -30,6 +30,7 @@ use YAML::XS;
 use C4::Context;
 use Koha::Logger;
 use Koha::DateUtils;
+use Koha::Token;
 
 use Koha::Libraries;
 use Koha::Library;
@@ -235,6 +236,8 @@ sub configure {
                 openinghours_loop_error => $openinghours_loop_error,
 
                 plugin_version => $Koha::Plugin::Fi::KohaSuomi::SelfService::VERSION,
+
+                csrf_token => Koha::Token->new->generate_csrf(),
             );
 
             $logger->trace('Rendering UI');
