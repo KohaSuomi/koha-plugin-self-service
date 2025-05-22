@@ -87,7 +87,9 @@ sub uninstall {
 }
 
 sub upgrade {
-    return Koha::Plugin::Fi::KohaSuomi::SelfService::Install::upgrade(@_);
+    my ( $self, $args ) = @_;
+
+    return 1;
 }
 
 sub cronjob_nightly {
